@@ -19,6 +19,15 @@ module DropboxShell
       }
     end
 
+    def inode_exists?(path)
+      begin
+        metadata = @client.metadata(path)
+        true
+      rescue
+        false
+      end
+    end
+
     private
     def try_connection
       puts "Attempting To Connect To Dropbox..."

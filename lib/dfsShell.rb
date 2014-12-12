@@ -12,8 +12,8 @@ module DFS
       @vpwd  = "/"
     end
 
-    def ls
-
+    def is_up_dir?(path)
+      !!path.match(UP_DIR_REGEX)
     end
 
     def up_dir

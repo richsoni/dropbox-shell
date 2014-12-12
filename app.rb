@@ -6,27 +6,31 @@ require "pry"
 @connection = DropboxShell::Connection.new
 @shell      = DFS::Shell.new("~/Dropbox", @connection.uname)
 
-def uname
-  @shell.uname
+Pry.config.commands.command "uname", "current user logged in" do |*args|
+  puts @shell.uname
 end
 
-def pwd
-  @shell.pwd
+Pry.config.commands.command "cd", "cd into new vfs scope" do |*args|
+  #todo fix updir non existant like ../bullshit from /Documents/current
+  if @connection.inode_exists?("#{@shell.pwd}/#{args[0]}") || @shell.is_up_dir?(args[0])
+    @shell.cd(args[0])
+    puts @shell.pwd
+  else
+    "#{args[0]} does not exist"
+  end
 end
 
-def ls(path = nil)
-  path = @shell.pwd unless path
-  inodes = @connection.inodes_at_path(path)
+Pry.config.commands.command "pwd", "return pwd" do |*args|
+  puts @shell.pwd
+end
+
+Pry.config.commands.command "ls", "ls the current scope" do |*args|
+  args[0] = @shell.pwd unless args[0]
+  inodes = @connection.inodes_at_path(args[0])
   inodes.sort.map {|inode|
     puts inode.to_s
   }
-  true
 end
 
-def cd(path = "/")
-  @shell.cd(path)
-end
-
-Pry.config.command_prefix='pry-'
 Pry.start(self, :prompt => [proc { "#{@shell.uname}@dbsh(#{@shell.pwd})$ " },
                             proc { "MORE INPUT REQUIRED!* " }])

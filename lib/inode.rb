@@ -19,7 +19,7 @@ module DropboxShell
       if dir?
         "#{name}/"
       else
-        name
+        name.to_s
       end
     end
 
