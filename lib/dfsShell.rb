@@ -22,6 +22,7 @@ module DFS
 
     def cd(path = "")
       case path
+        when NIL then @vpwd = '/'
         when '' then @vpwd = '/'
         when UP_DIR_REGEX
           up_dir
