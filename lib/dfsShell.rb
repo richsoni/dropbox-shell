@@ -37,6 +37,12 @@ module DFS
       end
     end
 
+    def inodes_at_path(path = "")
+      Dir.glob("*").map { |node|
+        # Inode.new()
+      }
+    end
+
     def pwd
       if @vpwd == "/"
         @vpwd

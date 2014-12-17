@@ -4,7 +4,7 @@ require "pathname"
 
 module DropboxShell
   class Connection
-    attr_reader :uname
+    attr_reader :uname, :client
     def initialize
       try_connection
     end

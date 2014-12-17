@@ -26,11 +26,19 @@ end
 
 Pry.config.commands.command "ls", "ls the current scope" do |*args|
   args[0] = shell.pwd unless args[0]
-  inodes = connection.inodes_at_path(args[0])
-  inodes.sort.map {|inode|
+  cloud_inodes = connection.inodes_at_path(args[0])
+  local_inodes = shell.inodes_at_path(args[0])
+  cloud_inodes.sort.map {|inode|
     puts inode.to_s
   }
 end
 
-Pry.start(self, :prompt => [proc { "#{shell.uname}@dbsh(#{shell.pwd})$ " },
-                            proc { "MORE INPUT REQUIRED!* " }])
+# has to be the last line yo
+Pry.start(self, {
+  :prompt => [proc { "#{shell.uname}@dbsh(#{shell.pwd})$ " },
+                            proc { "MORE INPUT REQUIRED!* " }],
+  :command_completions => proc {|a| []
+    # inodes = connection.inodes_at_path(shell.pwd)
+    # inodes.sort.map {|inode|
+    #   inode.to_s }
+  }})
