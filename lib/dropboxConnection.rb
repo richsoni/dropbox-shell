@@ -9,6 +9,14 @@ module DropboxShell
       try_connection
     end
 
+    def link(path)
+      begin
+        client.media(path)["url"]
+      rescue
+        path
+      end
+    end
+
     def inodes_at_path(path = "/")
       metadata = @client.metadata(path)
       inodes = metadata["contents"].map{ |d|

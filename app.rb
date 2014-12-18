@@ -24,6 +24,25 @@ Pry.config.commands.command "pwd", "return pwd" do |*args|
   puts shell.pwd
 end
 
+Pry.config.commands.command "genlink", "show public link for a file" do |*args|
+  if !args[0]
+    puts "path required"
+  else
+    puts connection.link(shell.buildPath(args[0]))
+  end
+end
+
+Pry.config.commands.command "open", "exec mac os x open command on a media file or a url" do |*args|
+  if !args[0]
+    puts "path required"
+  else
+    url = connection.link(shell.buildPath(args[0]))
+    shell.open(url)
+  end
+end
+
+
+
 Pry.config.commands.command "ls", "ls the current scope" do |*args|
   args[0] = shell.pwd unless args[0]
   cloud_inodes = connection.inodes_at_path(args[0])

@@ -12,6 +12,14 @@ module DFS
       @vpwd  = "/"
     end
 
+    def open(path)
+      `open #{path}`
+    end
+
+    def buildPath(path)
+      "#{pwd}/#{path}"
+    end
+
     def is_up_dir?(path)
       !!path.match(UP_DIR_REGEX)
     end
