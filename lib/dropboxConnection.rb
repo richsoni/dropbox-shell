@@ -4,9 +4,11 @@ require "pathname"
 
 module DropboxShell
   class Connection
-    attr_reader :uname, :client
+    attr_reader :uname, :client, :cached_inodes
+
     def initialize
       try_connection
+      @cached_inodes = []
     end
 
     def link(path)
@@ -17,9 +19,17 @@ module DropboxShell
       end
     end
 
+    def mv(src, dst)
+      @client.file_move(src, dst)
+    end
+
+    def mkdir(path)
+      @client.file_create_folder(path)
+    end
+
     def inodes_at_path(path = "/")
       metadata = @client.metadata(path)
-      inodes = metadata["contents"].map{ |d|
+      @cached_inodes = metadata["contents"].map{ |d|
         path = d["path"]
         type = d["is_dir"] ? :dir : :file
         name = Pathname.new(d["path"]).basename

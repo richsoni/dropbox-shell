@@ -40,7 +40,7 @@ module DFS
           if @vpwd == '/'
             @vpwd = path
           else
-            @vpwd = "#{@vpwd}/#{path}"
+            @vpwd = "#{@vpwd.sub(/\/$/, '')}/#{path}"
           end
       end
     end
